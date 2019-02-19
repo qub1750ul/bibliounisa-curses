@@ -23,7 +23,7 @@ dep = $(obj:.o=.d)
 
 # PHONY targets
 
-.PHONY: build tree dep run clean cleandep purge
+.PHONY: build tree dep run clean cleandep purge validate
 
 build: $(EXEPATH)
 
@@ -33,14 +33,19 @@ tree:
 run:
 	$(EXEPATH)
 
-clean:
-	rm -f $(obj) $(EXEPATH)
+cleanobj:
+	rm -f $(obj)
 
 cleandep:
 	rm -f $(dep)
 
-purge:
-	rm -rf $(obj) $(dep)
+cleanbuild:
+	rm -r $(DISTDIR)
+
+cleanall: clean cleandep
+
+validate:
+	deno-license-checker
 
 # explicit rules
 
