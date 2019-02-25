@@ -19,6 +19,7 @@
 #include "shapes.h"
 
 void ui_draw_box(
+		WINDOW * const win  ,
 		const size_t starty , const size_t startx ,
 		const size_t leny   , const size_t lenx
 	)
@@ -29,25 +30,26 @@ void ui_draw_box(
 		// Draw horizontal lines
 		for( size_t x = startx ; x < endx ; ++ x )
 			{
-				mvaddch( starty , x , ACS_HLINE ) ;
-				mvaddch( endy   , x , ACS_HLINE ) ;
+				mvwaddch( win , starty , x , ACS_HLINE ) ;
+				mvwaddch( win , endy   , x , ACS_HLINE ) ;
 			}
 
 		// Draw vertical lines
 		for( size_t y = starty ; y < endy ; ++ y )
 			{
-				mvaddch( y , startx , ACS_VLINE ) ;
-				mvaddch( y , endx   , ACS_VLINE ) ;
+				mvwaddch( win , y , startx , ACS_VLINE ) ;
+				mvwaddch( win , y , endx   , ACS_VLINE ) ;
 			}
 
 		// Add corners
-		mvaddch( starty , startx , ACS_ULCORNER ) ;
-		mvaddch( starty , endx   , ACS_URCORNER ) ;
-		mvaddch( endy   , startx , ACS_LLCORNER ) ;
-		mvaddch( endy   , endx   , ACS_LRCORNER ) ;
+		mvwaddch( win , starty , startx , ACS_ULCORNER ) ;
+		mvwaddch( win , starty , endx   , ACS_URCORNER ) ;
+		mvwaddch( win , endy   , startx , ACS_LLCORNER ) ;
+		mvwaddch( win , endy   , endx   , ACS_LRCORNER ) ;
 	}
 
 void ui_draw_array(
+		WINDOW * const win    ,
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
 		const size_t cellN
@@ -55,6 +57,7 @@ void ui_draw_array(
 	{
 		for( size_t drawnCells = 0 ; drawnCells < cellN ; ++ drawnCells )
 			ui_draw_box(
+					win ,
 					startY ,
 					startX + cLenghtX * drawnCells ,
 					cLengthY ,
@@ -64,39 +67,41 @@ void ui_draw_array(
 		// Correct intersections
 		for( size_t x = startX + cLenghtX ; x < startX + cLenghtX * cellN ; x += cLenghtX )
 			{
-				mvaddch( startY            , x , ACS_TTEE ) ;
-				mvaddch( startY + cLengthY , x , ACS_BTEE ) ;
+				mvwaddch( win , startY            , x , ACS_TTEE ) ;
+				mvwaddch( win , startY + cLengthY , x , ACS_BTEE ) ;
 			}
 
 		// Move the cursor past the drawing to allow correct rendering
-		move( startY + cLengthY , startX + cLenghtX * cellN + 1 ) ;
+		wmove( win , startY + cLengthY , startX + cLenghtX * cellN + 1 ) ;
 	}
 
 void ui_draw_matrix(
+		WINDOW * const win    ,
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLengthX ,
 		const size_t rows     , const size_t columns
 	)
 	{
 		for( size_t row = 0 ; row < rows ; ++ row )
-			ui_draw_array( startY + cLengthY * row , startX , cLengthY , cLengthX , columns ) ;
+			ui_draw_array( win , startY + cLengthY * row , startX , cLengthY , cLengthX , columns ) ;
 
 		// Fix intesections
 		for( size_t y = startY + cLengthY ; y < startY + cLengthY * rows ; y += cLengthY )
 			{
-				mvaddch( y , startX , ACS_LTEE ) ;
+				mvwaddch( win , y , startX , ACS_LTEE ) ;
 
 				for( size_t x = startX + cLengthX ; x < startX + cLengthX * columns ; x += cLengthX )
-					mvaddch( y , x , ACS_PLUS ) ;
+					mvwaddch( win , y , x , ACS_PLUS ) ;
 
-				mvaddch( y , startX + cLengthX * columns , ACS_RTEE ) ;
+				mvwaddch( win , y , startX + cLengthX * columns , ACS_RTEE ) ;
 			}
 
 		// Move the cursor past the drawing to allow correct rendering
-		move( startY + cLengthY * rows , startX + cLengthX * columns + 1 ) ;
+		wmove( win , startY + cLengthY * rows , startX + cLengthX * columns + 1 ) ;
 	}
 
 void ui_draw_matrix_group(
+		WINDOW * const win ,
 		const size_t drawingAreaStartY , const size_t drawingAreaStartX ,
 		const size_t cLengthY          , const size_t cLengthX ,
 		const size_t elementRows       , const size_t elementCol ,
@@ -110,6 +115,6 @@ void ui_draw_matrix_group(
 					size_t startY = drawingAreaStartY + ( cLengthY * elementRows + innerSpacingY ) * row ;
 					size_t startX = drawingAreaStartX + ( cLengthX * elementCol  + innerSpacingX ) * col ;
 
-					ui_draw_matrix( startY , startX , cLengthY , cLengthX , elementRows , elementCol ) ;
+					ui_draw_matrix( win , startY , startX , cLengthY , cLengthX , elementRows , elementCol ) ;
 				}
 	}

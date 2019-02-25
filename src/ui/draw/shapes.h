@@ -17,25 +17,30 @@
 #pragma once
 
 #include <stdlib.h>
+#include <ncurses.h>
 
 void ui_draw_box(
+		WINDOW * const win  ,
 		const size_t starty , const size_t startx ,
 		const size_t leny   , const size_t lenx
 	) ;
 
 void ui_draw_array(
+		WINDOW * const win    ,
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
 		const size_t cellN
 	) ;
 
 void ui_draw_matrix(
+		WINDOW * const win    ,
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
 		const size_t rows     , const size_t columns
 	) ;
 
 void ui_draw_matrix_group(
+		WINDOW * const win             ,
 		const size_t drawingAreaStartY , const size_t drawingAreaStartX ,
 		const size_t cLengthY          , const size_t cLengthX ,
 		const size_t elementRows       , const size_t elementCol ,
