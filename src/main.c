@@ -27,12 +27,12 @@
 int main()
 	{
 		// Initialization section
-		curl_global_init( CURL_GLOBAL_ALL ) ;
+		//curl_global_init( CURL_GLOBAL_ALL ) ;
 
-		CURL * curlEasySock_ptr = curl_easy_init() ;
+		//CURL * curlEasySock_ptr = curl_easy_init() ;
 
-		curl_easy_setopt( curlEasySock_ptr , CURLOPT_WRITEFUNCTION , curl_fetch_callback ) ;
-		curl_easy_setopt( curlEasySock_ptr , CURLOPT_WRITEDATA     , curlFetchBuf        ) ;
+		//curl_easy_setopt( curlEasySock_ptr , CURLOPT_WRITEFUNCTION , curl_fetch_callback ) ;
+		//curl_easy_setopt( curlEasySock_ptr , CURLOPT_WRITEDATA     , curlFetchBuf        ) ;
 
 		ui_init() ;
 
@@ -62,7 +62,7 @@ int main()
 		// Cleanup and exit
 
 		endwin() ;
-		curl_easy_cleanup( curlEasySock_ptr ) ;
+		//curl_easy_cleanup( curlEasySock_ptr ) ;
 
 		return EXIT_SUCCESS ;
 	}
