@@ -14,12 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include <string.h>
-#include <ncurses.h>
 
 #include "ui.h"
 #include "helper.h"
 
-void caddstr( size_t y , char s[] )
+void wcaddstr( WINDOW * const win , const size_t y , const char s[] )
 	{
-		mvaddstr( y , ( getmaxx( stdscr ) - strlen( s ) ) / 2 , s ) ;
+		mvwaddstr( win , y , ( getmaxx( win ) - strlen( s ) ) / 2 , s ) ;
 	}

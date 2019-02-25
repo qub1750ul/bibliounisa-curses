@@ -17,5 +17,8 @@
 #pragma once
 
 #include <stdlib.h>
+#include <ncurses.h>
 
-void caddstr( size_t y , char[] ) ;
+void wcaddstr( WINDOW * const , const size_t y , const char [] ) ;
+
+#define caddstr( y , str ) wcaddstr( stdscr , y , str )
