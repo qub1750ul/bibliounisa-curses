@@ -17,15 +17,7 @@
 #include <ncurses.h>
 
 #include "wshapes.h"
-
-/// Check if memory allocation has succeded
-void checkalloc( void * ptr )
-	{
-		if( ptr != NULL ) return ;
-
-		fputs( "CRITICAL ERROR: Cannot allocate memory" , stderr ) ;
-		exit( EXIT_FAILURE ) ;
-	}
+#include "whelper.h"
 
 /// Create a WINDOW array structure
 struct WindowArray * wcreate_win_array(

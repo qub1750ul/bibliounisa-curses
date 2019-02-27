@@ -46,7 +46,6 @@ struct WindowMatrix2
 		struct WindowMatrix * ** data = NULL ;
 	} ;
 
-
 struct WindowArray * wcreate_win_array(
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
