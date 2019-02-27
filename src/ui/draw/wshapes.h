@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 #pragma once
 
@@ -20,23 +20,46 @@
 #include <stdbool.h>
 #include <ncurses.h>
 
-typedef WINDOW ** WINDOW_ARRAY ;
-typedef WINDOW_ARRAY * WINDOW_MATRIX ;
-typedef WINDOW_MATRIX ** WINDOW_MATRIX_2 ;
+// RTTI support type
+enum WStructType
+	{
+		array ,
+		matrix ,
+		matrix2
+	} ;
 
-WINDOW_ARRAY wcreate_win_array(
+struct WindowArray
+	{
+		const enum WStructType typeId = array ;
+		WINDOW ** data = NULL ;
+	} ;
+
+struct WindowMatrix
+	{
+		const enum WStructType typeId = matrix ;
+		struct WindowArray ** data = NULL ;
+	} ;
+
+struct WindowMatrix2
+	{
+		const enum WStructType typeId = matrix2 ;
+		struct WindowMatrix * ** data = NULL ;
+	} ;
+
+
+struct WindowArray * wcreate_win_array(
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
 		const size_t cellN
 	) ;
 
-WINDOW_MATRIX wcreate_win_matrix(
+struct WindowMatrix * wcreate_win_matrix(
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
 		const size_t rows     , const size_t columns
 	) ;
 
-WINDOW_MATRIX_2 wcreate_win_matrix_2(
+struct WindowMatrix2 * wcreate_win_matrix_2(
 		const size_t drawingAreaStartY , const size_t drawingAreaStartX ,
 		const size_t cLengthY          , const size_t cLengthX ,
 		const size_t elementRows       , const size_t elementCol ,

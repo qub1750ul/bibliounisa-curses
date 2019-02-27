@@ -12,45 +12,67 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 #include <ncurses.h>
 
 #include "wshapes.h"
 
-WINDOW_ARRAY wcreate_win_array(
+/// Check if memory allocation has succeded
+void checkalloc( void * ptr )
+	{
+		if( ptr != NULL ) return ;
+
+		fputs( "CRITICAL ERROR: Cannot allocate memory" , stderr ) ;
+		exit( EXIT_FAILURE ) ;
+	}
+
+/// Create a WINDOW array structure
+struct WindowArray * wcreate_win_array(
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLenghtX ,
 		const size_t cellN
 	)
 	{
-		WINDOW_ARRAY array = malloc( sizeof( WINDOW_ARRAY ) * cellN ) ;
+		struct WindowArray * array = malloc( sizeof( struct WindowArray ) ) ;
+		checkalloc( array ) ;
+
+		array -> data = malloc( sizeof( WINDOW * ) * cellN ) ;
+		checkalloc( array -> data ) ;
 
 		for( size_t cell = 0 ; cell < cellN ; ++ cell )
-			array[ cell ] = newwin(
+			array -> data[ cell ] = newwin(
 					cLengthY , cLenghtX , startY , startX + cLenghtX * cell
 				) ;
 
 		return array ;
 	}
 
-WINDOW_MATRIX wcreate_win_matrix(
+/// Create a WINDOW matrix
+struct WindowMatrix * wcreate_win_matrix(
 		const size_t startY   , const size_t startX   ,
 		const size_t cLengthY , const size_t cLengthX ,
 		const size_t rows     , const size_t cols
 	)
 	{
-		WINDOW_MATRIX matrix = malloc( sizeof( WINDOW_MATRIX ) * rows ) ;
+		struct WindowMatrix * matrix = malloc( sizeof( struct WindowMatrix ) ) ;
+		checkalloc( matrix ) ;
+
+		matrix -> data = malloc( sizeof( struct WindowArray * ) * rows ) ;
+		checkalloc( matrix -> data ) ;
 
 		for( size_t row = 0 ; row < rows ; ++ row )
-			matrix[ row ] = wcreate_win_array(
+			matrix -> data [ row ] = wcreate_win_array(
 					startY + cLengthY * cols , startX , cLengthY , cLengthX , cols
 				) ;
 
 		return matrix ;
 	}
 
-WINDOW_MATRIX_2 wcreate_win_matrix_2(
+/** Create a WINDOW matrix matrix,
+ * that is a group of WINDOW matrixes with spacing among them
+ */
+struct WindowMatrix2 * wcreate_win_matrix_2(
 		const size_t drawingAreaStartY , const size_t drawingAreaStartX ,
 		const size_t cLengthY          , const size_t cLengthX ,
 		const size_t elementRows       , const size_t elementCol ,
@@ -58,22 +80,33 @@ WINDOW_MATRIX_2 wcreate_win_matrix_2(
 		const size_t innerSpacingY     , const size_t innerSpacingX
 	)
 	{
-		WINDOW_MATRIX_2 matrix2 = malloc( sizeof( WINDOW_MATRIX_2 ) * rows ) ;
+		struct WindowMatrix2 * matrix2 = malloc( sizeof( struct WindowMatrix2 ) ) ;
+		checkalloc( matrix2 ) ;
+
+		matrix2 -> data = malloc( sizeof( struct WindowMatrix ** ) * rows ) ;
+		checkalloc( matrix2 -> data ) ;
+
+		#define MATRIX2_CURRENT_ROW  matrix2 -> data[ row ]
+		#define MATRIX2_CURRENT_CELL MATRIX2_CURRENT_ROW [ col ]
 
 		for( size_t row = 0 ; row < rows ; ++ row )
 			{
-				matrix2[ row ] = malloc( sizeof( WINDOW_MATRIX * ) * cols ) ;
+				MATRIX2_CURRENT_ROW = malloc( sizeof( struct WindowMatrix * ) * cols ) ;
+				checkalloc( MATRIX2_CURRENT_ROW ) ;
 
 				for( size_t col = 0 ; col < cols ; ++ col )
 					{
 						size_t startY = drawingAreaStartY + ( cLengthY * elementRows + innerSpacingY ) * row ;
 						size_t startX = drawingAreaStartX + ( cLengthX * elementCol  + innerSpacingX ) * col ;
 
-						matrix2[ row ][ col ] = wcreate_win_matrix(
+						MATRIX2_CURRENT_CELL = wcreate_win_matrix(
 								startY , startX , cLengthY , cLengthX , elementRows , elementCol
 							) ;
 					}
 			}
+
+		#undef MATRIX2_CURRENT_ROW
+		#undef MATRIX2_CURRENT_CELL
 
 		return matrix2 ;
 	}
