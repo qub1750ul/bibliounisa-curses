@@ -22,3 +22,11 @@ WINDOW_ARRAY linearizeWMatrix( const WINDOW_MATRIX src , const size_t rows , con
 	}
 
 WINDOW_ARRAY linearizeWMatrix2( const WINDOW_MATRIX_2 src , const size_t rows , const size_t cols ) ;
+
+void checkalloc( void * ptr )
+	{
+		if( ptr != NULL ) return ;
+
+		fputs( "CRITICAL ERROR: Cannot allocate memory" , stderr ) ;
+		exit( EXIT_FAILURE ) ;
+	}

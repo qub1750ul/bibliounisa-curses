@@ -12,11 +12,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 #pragma once
 
 #include "settings.h"
 #include "wshapes.h"
 
-// Create scientific library seat table
-WINDOW_ARRAY wdraw_sciLib_seatTable( const DrawingSettings * const settings ) ;
+/// Create scientific library seat table
+struct WindowMatrix2 ** wdraw_sciLib_seatTable( const DrawingSettings * const settings ) ;

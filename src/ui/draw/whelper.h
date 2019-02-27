@@ -18,3 +18,6 @@
 
 WINDOW_ARRAY linearizeWMatrix( const WINDOW_MATRIX , const size_t rows , const size_t cols ) ;
 WINDOW_ARRAY linearizeWMatrix2( const WINDOW_MATRIX_2 , const size_t rows , const size_t cols ) ;
+
+/// Check if memory allocation has succeded
+void checkalloc( void * ptr ) ;
