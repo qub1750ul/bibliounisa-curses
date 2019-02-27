@@ -12,13 +12,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ */
 
 #include "wdraw.h"
 
-WINDOW_ARRAY wdraw_sciLib_seatTable( const DrawingSettings * const settings )
+struct WindowMatrix2 ** wdraw_sciLib_seatTable( const DrawingSettings * const settings )
 	{
-		WINDOW_ARRAY seatArray = malloc( sizeof( WINDOW * ) * 150 ) ;
+		struct WindowMatrix2 ** seatTable = malloc( sizeof( struct WindowMatrix2 ** ) ) ;
 
 		const uint8_t tableOffset = settings -> seatLenX * settings -> tableCols + settings -> spacingX ;
 		const uint8_t centerGroupOffset = settings -> offsetX + tableOffset * 2 ;
@@ -69,7 +69,7 @@ WINDOW_ARRAY wdraw_sciLib_seatTable( const DrawingSettings * const settings )
 		offsetX = settings -> offsetX ;
 
 		// Draw Left group
-		ui_draw_matrix_group(
+		wcreate_win_matrix_2(
 				offsetY , offsetX ,
 				settings -> seatLenY  , settings -> seatLenX ,
 				settings -> tableRows , settings -> tableCols ,
@@ -81,7 +81,7 @@ WINDOW_ARRAY wdraw_sciLib_seatTable( const DrawingSettings * const settings )
 
 		offsetX = rightGroupOffset ;
 
-		ui_draw_matrix_group(
+		wcreate_win_matrix_2(
 				offsetY   , offsetX      ,
 				settings -> seatLenY  , settings -> seatLenX     ,
 				settings -> tableRows , settings -> tableCols ,
@@ -100,7 +100,7 @@ WINDOW_ARRAY wdraw_sciLib_seatTable( const DrawingSettings * const settings )
 		offsetY += settings -> seatLenY * 2 + settings -> spacingY ;
 		offsetX = centerGroupOffset + settings -> seatLenX * 2 ;
 
-		ui_draw_matrix_group(
+		wcreate_win_matrix_2(
 				offsetY   , offsetX  ,
 				settings -> seatLenY  , settings -> seatLenX ,
 				1         , 3        ,
